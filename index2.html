@@ -1,0 +1,57 @@
+<!doctype html>
+<html ng-app="app">
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		
+		<input type="" name="" id="name" value="" ng-model="name"/>
+		<h1 id="name-h1" ng-bind="name"></h1>
+		
+		<div class="" ng-controller="MainCtrl as ctrl">
+			<h1>{{ctrl.msg}}</h1>
+			<button ng-click="ctrl.changeText()">改变文本</button>
+			<button ng-click="ctrl.weatherInfo()">获取天气信息</button>
+		</div>
+		
+		
+		<script src="js/mui.min.js"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<!--<script type="text/javascript">
+			$("#name").bind("input propertychange",function(){
+				console.log($(this).val());
+				$("#name-h1").html($(this).val());
+			})
+		</script>-->
+		<script type="text/javascript">
+			var app = angular.module('app',[]);//创建模块
+			app.controller('MainCtrl',['$http',function($http){
+				var self = this;
+				self.msg = "hello world";
+				self.changeText = function(){
+					self.msg = "hello angularjs";
+				};
+				self.weatherInfo = function(){
+					$http({
+						method:"GET",
+						url:"https://free-api.heweather.com/s6/weather/forecast?location=九江&key=1318c609832f407dab8f64b44d6d9160"
+					}).then(function success(response){
+						console.log("success:"+response.data.HeWeather6[0].daily_forecast[0].cond_txt_d);
+					},function error(error){
+						console.log("error:"+error);
+						//JS跨域问题
+					});
+				}
+			}]);
+		</script>
+	</body>
+</html>

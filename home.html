@@ -1,0 +1,54 @@
+<!doctype html>
+<html ng-app="app">
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div class="" ng-controller="MainCtrl as ctrl">
+			<input type="" name="" id="name" value="" ng-model="ctrl.city"/>
+			<button ng-click="ctrl.querycity()" >查询{{ctrl.city}}天气</button>
+			<ul>
+				<li ng-repeat="d in ctrl.dailyforcast">
+					<span class="item_span">{{d.date}}</span>
+					<span class="item_span">{{d.cond_txt_d}}</span>
+					<span class="item_span">{{d.tmp_max}}</span>
+				</li>
+			</ul>
+		</div>
+
+		<script src="js/mui.min.js"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<script type="text/javascript">
+			var app = angular.module("app", []);
+			app.controller('MainCtrl', ['$http', function($http) {
+				var self = this;
+				self.querycity = function(city) {
+					var w_url = 'https://free-api.heweather.com/s6/weather/forecast?location='+self.city+'&key=1318c609832f407dab8f64b44d6d9160';
+					
+					console.log('query...'+w_url);
+					$http({
+						method: 'GET',
+						url: w_url
+					}).then(function success(response) {
+						self.dailyforcast = response.data.HeWeather6[0].daily_forecast;
+						console.log("success:" + response.data.HeWeather6[0].daily_forecast[0].cond_txt_d);
+						console.log(JSON.stringify(response.data));
+					}, function error(response) {
+						console.log("error:" + response);
+					});
+				}
+
+			}])
+		</script>
+	</body>
+
+</html>
